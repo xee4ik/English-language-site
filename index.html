@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Хроники Языка: История английского языка</title>
+    <style>
+        :root {
+            --bg-color: #f4edd9;
+            --text-color: #2b261f;
+            --primary-color: #8b263e;
+            --secondary-color: #1e3f66;
+            --accent-color: #d4af37;
+            --card-bg: #fdfbf7;
+            --border-color: #d1c7bd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: "Georgia", serif;
+            background-color: var(--bg-color);
+            background-image: url('images/background.jpg');
+            background-attachment: fixed;
+            background-size: cover;
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 0;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            background-image: linear-gradient(rgba(139, 38, 62, 0.8), rgba(139, 38, 62, 0.8)), url('images/background.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            text-align: center;
+            padding: 4rem 1rem;
+            border-bottom: 5px solid var(--accent-color);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        header p {
+            font-style: italic;
+            font-size: 1.2rem;
+            color: #e0d0cc;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: var(--secondary-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        nav button {
+            background: none;
+            border: none;
+            color: white;
+            padding: 1rem 1.5rem;
+            font-size: 1.1rem;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        nav button:hover, nav button.active {
+            background-color: var(--accent-color);
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        /* Хронология */
+        .timeline-item {
+            border-left: 4px solid var(--secondary-color);
+            padding-left: 1.5rem;
+            position: relative;
+            margin-bottom: 2.5rem;
+        }
+
+        .timeline-item::before {
+            content: "";
+            position: absolute;
+            width: 12px;
+            height: 12px;
+            background-color: var(--accent-color);
+            border: 3px solid var(--secondary-color);
+            border-radius: 50%;
+            left: -11px;
+            top: 4px;
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+            margin-bottom: 0.3rem;
+        }
+
+        /* Стили для игр */
+        .game-area {
+            background: #fdfbf7;
+            border: 2px dashed var(--secondary-color);
+            padding: 2rem;
+            text-align: center;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+
+        .btn {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 4px;
+            font-family: inherit;
+            margin: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        .btn-accent {
+            background-color: var(--primary-color);
+        }
+
+        .word-pool {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin: 1.5rem 0;
+            flex-wrap: wrap;
+            min-height: 50px;
+        }
+
+        .draggable-word {
+            background: var(--accent-color);
+            padding: 0.5rem;
+            border-radius: 8px;
+            cursor: grab;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            width: 110px;
+            transition: transform 0.2s;
+        }
+
+        .draggable-word:hover {
+            transform: scale(1.05);
+        }
+
+        .draggable-word img {
+            width: 80px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            pointer-events: none;
+        }
+
+        .targets-container {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 1.5rem;
+        }
+
+        .target-zone {
+            width: 48%;
+            min-height: 150px;
+            border: 2px solid var(--border-color);
+            background: #f9f6f0;
+            padding: 1rem;
+            border-radius: 6px;
+        }
+
+        .target-zone h4 {
+            margin-bottom: 1rem;
+            color: var(--primary-color);
+        }
+
+        /* Звезды и Судья */
+        .stars-container {
+            margin: 1rem 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .star-icon {
+            width: 30px;
+            height: 30px;
+        }
+
+        .judge-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 1.5rem;
+            background: rgba(212, 175, 55, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            border: 1px solid var(--accent-color);
+        }
+
+        .judge-bubble {
+            background: white;
+            padding: 1rem;
+            border-radius: 15px;
+            position: relative;
+            border: 2px solid var(--secondary-color);
+            max-width: 70%;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+        }
+
+        .judge-bubble::after {
+            content: '';
+            position: absolute;
+            left: -15px;
+            top: 50%;
+            border: 10px solid transparent;
+            border-right-color: var(--secondary-color);
+            transform: translateY(-50%);
+        }
+
+        .judge-img {
+            width: 150px;
+            height: 150px;
+            object-fit: contain;
+            filter: drop-shadow(0 5px 15px rgba(0,0,0,0.2));
+        }
+
+        /* Квиз */
+        .quiz-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            background: white;
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background 0.2s;
+        }
+
+        .quiz-option:hover {
+            background: #f0eae1;
+        }
+
+        .feedback {
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 4px;
+            display: none;
+            font-weight: bold;
+        }
+
+        .feedback.correct {
+            background-color: #d4edda;
+            color: #155724;
+            display: block;
+        }
+
+        .feedback.wrong {
+            background-color: #f8d7da;
+            color: #721c24;
+            display: block;
+        }
+
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--text-color);
+            color: #a09586;
+            margin-top: 4rem;
+            font-size: 0.9rem;
+        }
+
+        /* Стили для Блица */
+        .blitz-area {
+            display: none;
+            background: #fff;
+            border: 2px solid var(--accent-color);
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+        }
+        .blitz-q { font-size: 1.2rem; font-weight: bold; margin-bottom: 1rem; }
+
+        /* Модальное окно */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        .modal-content {
+            background: var(--bg-color);
+            padding: 2.5rem;
+            border-radius: 12px;
+            max-width: 600px;
+            border: 3px solid var(--accent-color);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="welcome-modal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="margin-top:0">Добро пожаловать в «Хроники Языка»!</h2>
+            <p style="text-align:left; margin-bottom: 1.5rem;">
+                Мы подготовили для вас интерактивное путешествие:
+                <br>• <b>Карта истории:</b> Проследите путь от рун до мемов.
+                <br>• <b>Битва коней:</b> Распределяйте слова под присмотром судьи Незнайки.
+                <br>• <b>Grand Quiz:</b> Проверьте знания в 4 категориях и получите ранг.
+                <br>• <b>Взаимодействие:</b> Незнайка комментирует каждый ваш шаг!
+            </p>
+            <button class="btn btn-accent" onclick="closeModal()">Начать погружение</button>
+        </div>
+    </div>
+
+    <header>
+        <h1>Хроники Английского Языка</h1>
+        <p>От германских племен до глобального лингва франка — интерактивное погружение</p>
+    </header>
+
+    <nav>
+        <button onclick="switchTab('timeline')" id="btn-timeline" class="active">Карта истории</button>
+        <button onclick="switchTab('game1')" id="btn-game1">Битва коней</button>
+        <button onclick="switchTab('quiz')" id="btn-quiz">Grand quiz!</button>
+    </nav>
+
+    <div class="container">
+
+        <section id="timeline" class="tab-content active">
+            <h2>Великий путь длиною в полторы тысячи лет</h2>
+            <p style="margin-bottom: 2rem; font-size: 1.1rem;">Английский язык — это не просто средство общения, а живой памятник истории. Он впитал в себя суровость викингов, изящество французской знати и мощь индустриальной революции.</p>
+
+            <div class="timeline-item">
+                <div class="timeline-date">V–XI века: Древнеанглийский период</div>
+                <h3>Эпоха конунгов, рун и героических эпосов</h3>
+                <p>В 449 году германские племена — англы, саксы и юты — пересекли Северное море. Они принесли с собой суровый диалект, который мы теперь называем <strong>англосаксонским</strong>. Кельтское население было вытеснено, а их язык почти не оставил следа в основе английского.</p>
+                <div class="card" style="margin-top: 1rem;">
+                    <strong>Лингвистический фундамент:</strong> Хотя 85% древнеанглийских слов вышли из употребления, оставшиеся 15% — это «скелет» языка. Все базовые понятия (<i>water, child, day, night</i>) и служебные части речи остались германскими. Скандинавское влияние принесло не только существительные, но и ключевые местоимения (<i>they, them, their</i>), что крайне редко случается при заимствовании.
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-date">1066–1500 годы: Среднеанглийский период</div>
+                <h3>Французский блеск и «демократизация» грамматики</h3>
+                <p>Победа Вильгельма Завоевателя при Гастингсе в 1066 году привела к тому, что в Англии воцарилось трехъязычие. Латынь осталась языком церкви и науки, нормандский французский стал языком двора и права, а английский превратился в язык «черни».</p>
+                <p>Именно в этот период английский радикально упростился: исчезли сложные падежи и категории рода. Язык стал более аналитическим, компенсируя потерю окончаний строгим порядком слов. В это же время в лексику вошло более 10 000 французских слов, связанных с законом, армией и кухней.</p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-date">XVI–XVIII века: Ранний новоанглийский (Early Modern English)</div>
+                <h3>Шекспир, Книгопечатание</h3>
+                <p>Появление печатного станка Уильяма Кекстона в 1476 году зафиксировало орфографию. В это же время происходит <strong>Великий сдвиг гласных (Great Vowel Shift)</strong> — люди начали произносить долгие гласные совершенно иначе (из-за чего сегодня правописание английского кажется хаотичным).</p>
+                <p>Уильям Шекспир лично обогатил язык более чем 1700 новыми словами (включая <i>lonely, addiction, swagger</i>), превратив его в гибкий инструмент высокой литературы.</p>
+            </div>
+
+            <div class="timeline-item">
+                <div class="timeline-date">XIX век – Настоящее время: Современный английский (Modern English)</div>
+                <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+                    <p style="flex: 1; min-width: 300px;">Британская империя разнесла язык по всему земному шару. Появились американские, австралийские и индийские диалекты. Сегодня английский переживает новый бум из-за технологий, мемов и глобального кодинга.</p>
+                    <img src="images/flag America.png" alt="USA Flag" style="width: 100px; border: 1px solid var(--border-color); border-radius: 4px;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Вкладка 2: Игра "Битва Корней" -->
+        <section id="game1" class="tab-content">
+            <h2>Лингвистическая игра: «Битва за Британию»</h2>
+            
+            <div class="judge-container">
+                <img src="images/neznaika.png" class="judge-img" alt="Судья Незнайка">
+                <div class="judge-bubble">
+                    <p id="judge-text">Привет! Я Незнайка, сегодня я сужу ваш лингвистический поединок. Выберите режим и начните игру!</p>
+                </div>
+            </div>
+
+            <div class="mode-selector" style="display: flex; justify-content: center; gap: 10px;">
+                <button class="btn btn-accent" id="toggle-mode-btn" onclick="toggleGameMode()">Режим: Обыватель</button>
+            </div>
+
+            <div id="sorting-game-area" class="game-area">
+                <div class="word-pool" id="wordPool"></div>
+                <div class="targets-container">
+                    <div class="target-zone" id="zone-germanic" ondragover="allowDrop(event)" ondrop="dropWord(event, 'germanic')">
+                        <h4>Германские корни (Крестьяне)</h4>
+                        <div id="list-germanic"></div>
+                    </div>
+                    <div class="target-zone" id="zone-french" ondragover="allowDrop(event)" ondrop="dropWord(event, 'french')">
+                        <h4>Французские корни (Знать)</h4>
+                        <div id="list-french"></div>
+                    </div>
+                </div>
+                <div style="margin-top: 1.5rem;">
+                    <button class="btn btn-accent" onclick="checkGame1()">Проверить результаты</button>
+                    <button class="btn" onclick="initGame1()">Сбросить игру</button>
+                </div>
+                <div id="game1-result" style="margin-top: 1rem; font-weight: bold;"></div>
+            </div>
+
+            <div id="blitz-game-area" class="blitz-area">
+                <div class="blitz-q" id="blitz-question">Вопрос?</div>
+                <div style="display: flex; justify-content: center; gap: 10px;">
+                    <button class="btn btn-accent" onclick="answerBlitz(true)">Правда</button>
+                    <button class="btn" onclick="answerBlitz(false)">Ложь</button>
+                </div>
+                <div id="blitz-feedback" style="margin-top: 1rem; font-style: italic;"></div>
+                <button class="btn" style="margin-top: 1rem; display: none;" id="blitz-back-btn" onclick="toggleGameMode()">Назад к битве</button>
+            </div>
+        </section>
+
+        <!-- Вкладка 4: Квиз -->
+        <section id="quiz" class="tab-content">
+            <h2>Гранд-Квиз: Испытание Эрудита</h2>
+            
+            <div class="judge-container">
+                <img src="images/neznaika.png" class="judge-img" alt="Судья Незнайка">
+                <div class="judge-bubble">
+                    <p id="quiz-judge-text">Готовы к серьезному испытанию? Выбирайте тему, а я посмотрю, на что вы способны!</p>
+                </div>
+            </div>
+
+            <div id="quiz-menu" class="card" style="text-align: center;">
+                <h3>Выберите тему испытания:</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 1.5rem;">
+                    <button class="btn" onclick="startQuiz('general')">Общая история</button>
+                    <button class="btn" onclick="startQuiz('vikings')">Наследие викингов</button>
+                    <button class="btn" onclick="startQuiz('shakespeare')">Век Шекспира</button>
+                    <button class="btn" onclick="startQuiz('modern')">Мировая экспансия</button>
+                </div>
+            </div>
+
+            <div class="card" id="quiz-card" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <span id="quiz-progress" style="font-size: 0.9rem; color: #666;"></span>
+                    <button class="btn" style="padding: 0.3rem 0.6rem; font-size: 0.8rem; margin: 0;" onclick="showQuizMenu()">← К выбору тем</button>
+                </div>
+                <h3 id="quiz-question-title">Загрузка вопроса...</h3>
+                <div id="quiz-options-container" style="margin-top: 1rem;"></div>
+                <div id="quiz-feedback" class="feedback"></div>
+                <button id="quiz-next-btn" class="btn btn-accent" style="display:none; margin-top: 1rem;" onclick="nextQuestion()">Следующий вопрос</button>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Интерактивный сайт популяризации истории становления Английского языка.<br>Создано С. В. С. для проекта учебного курса СПО «Популяризация становления Английского языка»</p>
+    </footer>
+
+    <script>
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.getElementById('btn-' + tabId).classList.add('active');
+            if(tabId === 'game1') {
+                if(currentGameMode === 'blitz') startBlitz();
+                else backToSorting();
+            }
+        }
+
+        const game1WordsNormal = [
+            { text: 'Cow', img: 'images/items/cow.jpg', type: 'germanic' },
+            { text: 'Beef', img: 'images/items/beef.jpg', type: 'french' },
+            { text: 'House', img: 'images/items/house.jpg', type: 'germanic' },
+            { text: 'Mansion', img: 'images/items/mansion.jpeg', type: 'french' },
+            { text: 'Sheep', img: 'images/items/sheep.png', type: 'germanic' },
+            { text: 'Mutton', img: 'images/items/mutton.png', type: 'french' }
+        ];
+
+        const game1WordsExpert = [
+            { text: 'Friendship', img: 'images/items/friendship.jpg', type: 'germanic' },
+            { text: 'Amity', img: 'images/items/amity.jpg', type: 'french' },
+            { text: 'Apple', img: 'images/items/apple.jpeg', type: 'germanic' },
+            { text: 'Fruit', img: 'images/items/fruits.jpg', type: 'french' },
+            { text: 'Answer', img: 'images/items/answer.png', type: 'germanic' },
+            { text: 'Response', img: 'images/items/responce.png', type: 'french' },
+            { text: 'Book', img: 'images/items/book.jpg', type: 'germanic' },
+            { text: 'Library', img: 'images/items/library.jpg', type: 'french' }
+        ];
+
+        let currentGameMode = 'normal';
+        let playerAnswers = { germanic: [], french: [] };
+
+        function toggleGameMode() {
+            const judge = document.getElementById('judge-text');
+            const btn = document.getElementById('toggle-mode-btn');
+
+            if (currentGameMode === 'normal') {
+                currentGameMode = 'expert';
+                btn.innerText = `Режим: Профессор`;
+                judge.innerText = "Ого, уровень профессора? Ну, дерзайте, тут слов побольше!";
+                backToSorting();
+            } else if (currentGameMode === 'expert') {
+                currentGameMode = 'blitz';
+                btn.innerText = `Режим: Блиц`;
+                judge.innerText = "О! Мой любимый Блиц! Отвечай быстро: правда или ложь? Я буду следить!";
+                startBlitz();
+            } else {
+                currentGameMode = 'normal';
+                btn.innerText = `Режим: Обыватель`;
+                judge.innerText = "Обычный режим. Самое то для разминки перед серьезным делом.";
+                backToSorting();
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('welcome-modal').style.display = 'none';
+        }
+
+        function initGame1() {
+            const pool = document.getElementById('wordPool');
+            const listGer = document.getElementById('list-germanic');
+            const listFre = document.getElementById('list-french');
+            document.getElementById('game1-result').innerText = '';
+            pool.innerHTML = ''; listGer.innerHTML = ''; listFre.innerHTML = '';
+            playerAnswers = { germanic: [], french: [] };
+            
+            const words = currentGameMode === 'expert' ? [...game1WordsNormal, ...game1WordsExpert] : [...game1WordsNormal];
+            words.sort(() => Math.random() - 0.5).forEach((word, index) => {
+                const el = document.createElement('div');
+                el.className = 'draggable-word';
+                el.id = 'word-' + index;
+                el.draggable = true;
+                el.innerHTML = `<img src="${word.img}" alt="${word.text}"><span>${word.text}</span>`;
+                el.ondragstart = (e) => e.dataTransfer.setData('text/plain', JSON.stringify({id: el.id, text: word.text, img: word.img, type: word.type}));
+                pool.appendChild(el);
+            });
+        }
+
+        function allowDrop(ev) { ev.preventDefault(); }
+        function dropWord(ev, zoneType) {
+            ev.preventDefault();
+            const dataStr = ev.dataTransfer.getData('text/plain');
+            if(!dataStr) return;
+            const data = JSON.parse(dataStr);
+            const element = document.getElementById(data.id);
+            if(element) {
+                element.parentNode.removeChild(element);
+                const item = document.createElement('div');
+                item.style.margin = '5px 0'; 
+                item.style.padding = '5px';
+                item.style.background = '#eee'; 
+                item.style.borderRadius = '4px';
+                item.style.display = 'flex';
+                item.style.alignItems = 'center';
+                item.style.gap = '10px';
+                item.innerHTML = `<img src="${data.img}" style="width:30px; height:25px; object-fit:cover; border-radius:2px;"><span>${data.text}</span>`;
+                document.getElementById('list-' + zoneType).appendChild(item);
+                playerAnswers[zoneType].push(data);
+                
+                const judge = document.getElementById('judge-text');
+                judge.innerText = ["Так, неплохо...", "Хм, интересно...", "Уверен?", "Хороший выбор!"][Math.floor(Math.random()*4)];
+            }
+        }
+
+        function getStars(score, total) {
+            let starsHtml = '<div class="stars-container">';
+            let starCount = Math.round((score / total) * 3);
+            for(let i=0; i<3; i++) {
+                const starImg = i < starCount ? 'images/star yellow.png' : 'images/star gray.png';
+                starsHtml += `<img src="${starImg}" class="star-icon">`;
+            }
+            return starsHtml + '</div>';
+        }
+
+        function checkGame1() {
+            let correct = 0;
+            const words = currentGameMode === 'expert' ? 14 : 6;
+            playerAnswers.germanic.forEach(w => { if(w.type === 'germanic') correct++; });
+            playerAnswers.french.forEach(w => { if(w.type === 'french') correct++; });
+            const resultDiv = document.getElementById('game1-result');
+            resultDiv.innerHTML = getStars(correct, words) + `Результат: ${correct}/${words}`;
+            document.getElementById('judge-text').innerText = correct === words ? "Великолепно! Ты настоящий лингвист." : "Неплохо, но можно лучше! Не расстраивайся.";
+        }
+
+        // --- БЛИЦ-ИГРА НЕЗНАЙКИ ---
+        const blitzData = [
+            { q: "Слово 'Sky' пришло из французского?", a: false, h: "Нет, это скандинавское слово!" },
+            { q: "Шекспир придумал слово 'Swagger'?", a: true, h: "Да, он был тем еще модником." },
+            { q: "В древнеанглийском были руны?", a: true, h: "Точно! До латыни использовали рунический алфавит." },
+            { q: "Английский — это романский язык?", a: false, h: "Нет, он германский по происхождению." },
+            { q: "Слово 'Beef' германское?", a: false, h: "Нет, оно французское!" }
+        ];
+        let currentBlitzIdx = 0;
+
+        function startBlitz() {
+            document.getElementById('sorting-game-area').style.display = 'none';
+            document.getElementById('blitz-game-area').style.display = 'block';
+            document.getElementById('blitz-back-btn').style.display = 'none';
+            currentBlitzIdx = 0;
+            nextBlitz();
+        }
+
+        function backToSorting() {
+            document.getElementById('sorting-game-area').style.display = 'block';
+            document.getElementById('blitz-game-area').style.display = 'none';
+            initGame1();
+        }
+
+        function nextBlitz() {
+            if(currentBlitzIdx >= blitzData.length) {
+                document.getElementById('blitz-question').innerText = "Блиц окончен!";
+                document.getElementById('blitz-feedback').innerText = "Ты прошел испытание Незнайки.";
+                document.getElementById('blitz-back-btn').style.display = 'inline-block';
+                return;
+            }
+            document.getElementById('blitz-question').innerText = blitzData[currentBlitzIdx].q;
+            document.getElementById('blitz-feedback').innerText = "";
+        }
+
+        function answerBlitz(val) {
+            const correct = blitzData[currentBlitzIdx].a;
+            if (val === correct) {
+                document.getElementById('blitz-feedback').innerText = "Верно!";
+                document.getElementById('judge-text').innerText = ["В точку!", "Да ты гений!", "Красава!", "Так держать!"][Math.floor(Math.random()*4)];
+            } else {
+                document.getElementById('blitz-feedback').innerText = "Ошибка! " + blitzData[currentBlitzIdx].h;
+                document.getElementById('judge-text').innerText = ["Ой-ёй...", "Мимо!", "Ну как так-то?", "Попробуй еще раз!"][Math.floor(Math.random()*4)];
+            }
+            currentBlitzIdx++;
+            setTimeout(nextBlitz, 1500);
+        }
+
+        // --- ГРАНД-КВИЗ ---
+        const allQuizzes = {
+            general: [
+                { q: "Какое событие в 1066 году изменило английский язык?", options: ["Завоевание норманнов", "Изобретение интернета", "Падение Рима", "Великая чума"], correct: 0, hint: "Норманны принесли французские слова." },
+                { q: "Что такое Великий сдвиг гласных?", options: ["Смена алфавита", "Изменение произношения", "Переезд в США", "Запрет латыни"], correct: 1, hint: "Это изменило звучание в XV-XVII веках." },
+                { q: "Кто ввел 1700+ новых слов?", options: ["Чосер", "Шекспир", "Кехстон", "Диккенс"], correct: 1, hint: "Шекспир был великим инноватором." },
+                { q: "На каком языке писались законы в Англии после 1066 года?", options: ["На английском", "На французском", "На немецком", "На кельтском"], correct: 1, hint: "Французский был языком власти 300 лет." },
+                { q: "Какой алфавит использовался до латиницы?", options: ["Греческий", "Руны", "Иероглифы", "Кириллица"], correct: 1, hint: "Германские племена использовали руны." },
+                { q: "К какой языковой семье относится английский?", options: ["Романская", "Германская", "Славянская", "Финно-угорская"], correct: 1, hint: "Несмотря на заимствования, корни германские." }
+            ],
+            vikings: [
+                { q: "Какие слова пришли от викингов?", options: ["Sky, egg, window", "Beef, pork, table", "Logic, theory, math", "Computer, phone, link"], correct: 0, hint: "Скандинавы дали нам базовые слова." },
+                { q: "Как называлась область Англии под властью викингов?", options: ["Danelaw (Данло)", "Normandy", "Wessex", "Vikingland"], correct: 0, hint: "Область датского права." },
+                { q: "Какое местоимение мы получили от скандинавов?", options: ["He", "I", "They", "We"], correct: 2, hint: "Они заменили старое 'hie' на 'they'." },
+                { q: "От какого бога произошло слово 'Thursday'?", options: ["Один", "Тор", "Локи", "Фрейя"], correct: 1, hint: "Thor's Day!" },
+                { q: "Что викинги принесли в английский вместе со словами?", options: ["Падежи", "Упрощенную грамматику", "Иероглифы", "Сложное произношение"], correct: 1, hint: "Смешение языков ускорило отмирание окончаний." }
+            ],
+            shakespeare: [
+                { q: "В какой период жил Шекспир?", options: ["Средневековье", "Возрождение", "Древний мир", "XIX век"], correct: 1, hint: "Его время — расцвет английского Возрождения." },
+                { q: "Какое слово придумал Шекспир?", options: ["Addiction", "Internet", "Google", "Revolution"], correct: 0, hint: "Он обожал создавать новые слова." },
+                { q: "На каком языке писал Шекспир?", options: ["Древнеанглийский", "Ранний современный", "Французский", "Латынь"], correct: 1, hint: "Его язык близок к современному." },
+                { q: "Как назывался театр Шекспира?", options: ["Глобус", "Колизей", "Большой", "Стратфорд"], correct: 0, hint: "The Globe Theater." },
+                { q: "Сколько примерно слов изобрел Шекспир?", options: ["50", "Более 1700", "Ни одного", "Ровно 100"], correct: 1, hint: "Он был невероятно плодовит в создании лексики." }
+            ],
+            modern: [
+                { q: "Почему английский стал глобальным?", options: ["Из-за Британской империи", "Потому что легкий", "Случайно", "Решили в ООН"], correct: 0, hint: "Колониальная политика разнесла язык." },
+                { q: "Какая страна дала наибольший вклад в сленг сегодня?", options: ["Индия", "Австралия", "США", "Канада"], correct: 2, hint: "Голливуд и технологии диктуют тренды." },
+                { q: "Сколько людей говорят на английском?", options: ["100 млн", "Около 1.5 млрд", "Весь мир", "500 млн"], correct: 1, hint: "Это самый распространенный второй язык." },
+                { q: "Кто создал первый влиятельный словарь американского английского?", options: ["Ноа Уэбстер", "Томас Джефферсон", "Бенджамин Франклин", "Авраам Линкольн"], correct: 0, hint: "Именно Webster упростил написание (color вместо colour)." },
+                { q: "Что такое 'Lingua Franca'?", options: ["Французский язык", "Язык международного общения", "Мертвый язык", "Тайный шифр"], correct: 1, hint: "Сегодня английский — главный Лингва Франка." }
+            ]
+        };
+
+        let activeQuizSet = [];
+        let currentIdx = 0;
+        let score = 0;
+        let cat = '';
+
+        function showQuizMenu() {
+            document.getElementById('quiz-menu').style.display = 'block';
+            document.getElementById('quiz-card').style.display = 'none';
+            document.getElementById('quiz-judge-text').innerText = "Готовы к серьезному испытанию? Выбирайте тему!";
+        }
+
+        function startQuiz(category) {
+            activeQuizSet = allQuizzes[category];
+            cat = category;
+            currentIdx = 0; score = 0;
+            document.getElementById('quiz-menu').style.display = 'none';
+            document.getElementById('quiz-card').style.display = 'block';
+            document.getElementById('quiz-judge-text').innerText = "О, отличный выбор темы! Поехали.";
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            const feedback = document.getElementById('quiz-feedback');
+            feedback.style.display = 'none';
+            document.getElementById('quiz-next-btn').style.display = 'none';
+            
+            if(currentIdx >= activeQuizSet.length) {
+                const stars = getStars(score, activeQuizSet.length);
+                let rank = score === activeQuizSet.length ? "Великий Магистр" : score > (activeQuizSet.length/2) ? "Знаток" : "Новичок";
+                
+                let finalComment = score === activeQuizSet.length ? "Просто невероятно! Ты знаешь больше самого Шекспира!" : "Слушай, а ты неплох. Почти как я (ну, почти).";
+                if(score < 2) finalComment = "Мда... Кажется, вам нужно еще разок почитать учебники.";
+                
+                document.getElementById('quiz-judge-text').innerText = finalComment;
+                document.getElementById('quiz-card').innerHTML = `<div style="text-align:center;">${stars}<h3>Готово!</h3><p>Счет: ${score}/${activeQuizSet.length}</p><p>Ранг: ${rank}</p><button class="btn btn-accent" onclick="startQuiz(cat)">Повторить</button><button class="btn" onclick="showQuizMenu()">К темам</button></div>`;
+                return;
+            }
+            const q = activeQuizSet[currentIdx];
+            document.getElementById('quiz-progress').innerText = `Вопрос ${currentIdx + 1}/${activeQuizSet.length}`;
+            document.getElementById('quiz-question-title').innerText = q.q;
+            const container = document.getElementById('quiz-options-container');
+            container.innerHTML = '';
+            q.options.forEach((opt, idx) => {
+                const b = document.createElement('button');
+                b.className = 'quiz-option'; b.innerText = opt;
+                b.onclick = () => {
+                    document.querySelectorAll('.quiz-option').forEach(btn => btn.disabled = true);
+                    const judge = document.getElementById('quiz-judge-text');
+                    if(idx === q.correct) { 
+                        score++; 
+                        feedback.innerText = "Верно!"; 
+                        feedback.className = "feedback correct"; 
+                        judge.innerText = ["Так держать!", "В точку!", "Красавчик!", "Я и не сомневался!"][Math.floor(Math.random()*4)];
+                    }
+                    else { 
+                        feedback.innerText = "Ошибка! " + q.hint; 
+                        feedback.className = "feedback wrong"; 
+                        judge.innerText = ["Почти угадал!", "Ой, мимо...", "Почти угадал (нет).", "Ну как же так?", "Соберись!", "Сконцентрируйся!"][Math.floor(Math.random()*4)];
+                    }
+                    feedback.style.display = 'block';
+                    document.getElementById('quiz-next-btn').style.display = 'inline-block';
+                };
+                container.appendChild(b);
+            });
+        }
+
+        function nextQuestion() { currentIdx++; loadQuestion(); }
+        window.onload = () => { showQuizMenu(); initGame1(); };
+    </script>
+</body>
+</html>
